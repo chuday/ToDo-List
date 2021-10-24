@@ -12,38 +12,33 @@ import Foundation
 // Логика работы приложения
 
 // массив дел
-var ToDoItems: [[String: Any]] = [
-                                ["Name": "Сделать звонок","isCompleted": false],
-                                ["Name": "Запилить аппку", "isCompleted": false],
-                                ["Name": "Залить на git", "isCompleted": false]
-                                ]
+var ToDoItems: [[String: Any]] {
+    get {
+        if let array = UserDefaults.standard.array(forKey: "ToDoDataKey") as? [[String : Any]] {
+            return array
+        } else {
+            return []
+        }
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: "ToDoDataKey")
+        UserDefaults.standard.synchronize()
+    }
+}
 
 // добавить айтем
 func addItem(nameItem: String, isCompleted: Bool = false) {
     ToDoItems.append(["Name": nameItem, "isCompleted": isCompleted])
-    saveData()
 }
 
 // удалить айтем
 func removeItem(at index: Int) {
     ToDoItems.remove(at: index)
-    saveData()
 }
 
 // меняем состояние выполнения дел по списку
 func changeState(at item: Int) -> Bool {
     ToDoItems[item]["isCompleted"] = !(ToDoItems[item]["isCompleted"] as! Bool)
-    saveData()
     
     return ToDoItems[item]["isCompleted"] as! Bool
-}
-
-// при вненсении изменений будем сохранять данные
-func saveData() {
-    
-}
-
-// при запуске будем загружать данные
-func loadData() {
-    
 }
