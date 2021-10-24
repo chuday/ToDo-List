@@ -36,6 +36,12 @@ func removeItem(at index: Int) {
     ToDoItems.remove(at: index)
 }
 
+func moveItem(fromIndex: Int, toIndex: Int) {
+    let from = ToDoItems[fromIndex]
+    ToDoItems.remove(at: fromIndex)
+    ToDoItems.insert(from, at: toIndex)
+}
+
 // меняем состояние выполнения дел по списку
 func changeState(at item: Int) -> Bool {
     ToDoItems[item]["isCompleted"] = !(ToDoItems[item]["isCompleted"] as! Bool)
