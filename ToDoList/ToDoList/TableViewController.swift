@@ -14,6 +14,10 @@ class TableViewController: UITableViewController {
         
         // анимированный показ режима редактирования
         tableView.setEditing(!tableView.isEditing, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.tableView.reloadData()
+        }
+//        tableView.reloadData()
     }
     
     
@@ -45,6 +49,11 @@ class TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // убираем ненужные линии где нет строк
+        tableView.tableFooterView = UIView()
+        
+        tableView.backgroundColor = UIColor.lightGray
     }
 
     // MARK: - Table view data source
@@ -67,6 +76,14 @@ class TableViewController: UITableViewController {
             cell.imageView?.image = UIImage(named: "check")
         } else {
             cell.imageView?.image = UIImage(named: "uncheck")
+        }
+        
+        if tableView.isEditing {
+            cell.textLabel?.alpha = 0.4
+            cell.imageView?.alpha = 0.4
+        } else {
+            cell.textLabel?.alpha = 1
+            cell.imageView?.alpha = 1
         }
 
         return cell
@@ -107,6 +124,20 @@ class TableViewController: UITableViewController {
         
         tableView.reloadData()
 
+    }
+    
+    // режим редактирования ячейки
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if tableView.isEditing {
+        return .none
+        } else {
+            return .delete
+        }
+    }
+    
+    // следует ли ним смещать элементы ячейки во время редактирования
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
     
 
